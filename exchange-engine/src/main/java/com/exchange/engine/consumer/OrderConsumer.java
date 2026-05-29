@@ -1,6 +1,7 @@
 package com.exchange.engine.consumer;
 
 import com.exchange.common.command.PlaceOrderCommand;
+import com.exchange.common.event.ExchangeEvent;
 import com.exchange.engine.matcher.MatchingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +27,10 @@ public class OrderConsumer {
                 command.getSide(), command.getQuantity(),
                 command.getTradingPair(), command.getPrice());
 
-        List<Object> events = matchingService.handlePlaceOrder(command);
+        List<ExchangeEvent> events = matchingService.handlePlaceOrder(command);
 
-        for (Object event : events) {
-            kafkaTemplate.send(TOPIC_OUT, command.getTradingPair(), event);
+        for (ExchangeEvent event : events) {
+            kafkaTemplate.send(TOPIC_OUT, event.getTradingPair(), event);
         }
 
         log.info("Published {} events for order {}", events.size(), command.getOrderId());

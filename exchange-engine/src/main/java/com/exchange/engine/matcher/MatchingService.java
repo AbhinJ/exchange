@@ -2,6 +2,7 @@ package com.exchange.engine.matcher;
 
 import com.exchange.common.command.CancelOrderCommand;
 import com.exchange.common.command.PlaceOrderCommand;
+import com.exchange.common.event.ExchangeEvent;
 import com.exchange.common.event.OrderAcceptedEvent;
 import com.exchange.common.event.OrderCancelledEvent;
 import com.exchange.common.event.TradeEvent;
@@ -20,7 +21,7 @@ public class MatchingService {
 
     private final Map<String, OrderBook> orderBooks = new ConcurrentHashMap<>();
 
-    public List<Object> handlePlaceOrder(PlaceOrderCommand command) {
+    public List<ExchangeEvent> handlePlaceOrder(PlaceOrderCommand command) {
         OrderBook book = orderBooks.computeIfAbsent(
                 command.getTradingPair(), OrderBook::new);
 
@@ -37,7 +38,7 @@ public class MatchingService {
 
         // Match the order against the book
         List<TradeEvent> trades = book.addOrder(order);
-        List<Object> events = new ArrayList<>(trades);
+        List<ExchangeEvent> events = new ArrayList<>(trades);
 
         for (TradeEvent trade : trades) {
             log.info("Trade executed: {} {} @ {} on {}",
@@ -66,8 +67,8 @@ public class MatchingService {
         return events;
     }
 
-    public List<Object> handleCancelOrder(CancelOrderCommand command) {
-        List<Object> events = new ArrayList<>();
+    public List<ExchangeEvent> handleCancelOrder(CancelOrderCommand command) {
+        List<ExchangeEvent> events = new ArrayList<>();
 
         OrderBook book = orderBooks.get(command.getTradingPair());
         if (book != null && book.cancelOrder(command.getOrderId())) {
