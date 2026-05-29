@@ -32,11 +32,19 @@
         <lombok.version>1.18.32</lombok.version>
         <jjwt.version>0.12.5</jjwt.version>
         <jackson.version>2.17.0</jackson.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Spring Boot BOM: imports ALL Spring Boot dependency versions -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>1.21.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -45,14 +53,12 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Our own common module -->
             <dependency>
                 <groupId>com.exchange</groupId>
                 <artifactId>exchange-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- JWT -->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-api</artifactId>
@@ -88,6 +94,11 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
                 </plugin>
             </plugins>
         </pluginManagement>
