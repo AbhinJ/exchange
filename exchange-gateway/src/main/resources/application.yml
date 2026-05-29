@@ -4,8 +4,8 @@ server:
 spring:
   r2dbc:
     url: r2dbc:postgresql://127.0.0.1:5432/exchange?sslMode=disable
-    username: exchange
-    password: exchange123
+    username: ${DB_USERNAME:exchange}
+    password: ${DB_PASSWORD:exchange123}
   sql:
     init:
       mode: always
@@ -17,6 +17,6 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 jwt:
-  secret: my-super-secret-key-that-is-at-least-32-bytes-long-for-hmac
+  secret: ${JWT_SECRET:my-super-secret-key-that-is-at-least-32-bytes-long-for-hmac}
   expiration-ms: 900000
   refresh-expiration-ms: 604800000

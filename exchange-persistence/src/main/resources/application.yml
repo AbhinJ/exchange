@@ -3,8 +3,8 @@ spring:
     web-application-type: none
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/exchange
-    username: exchange
-    password: exchange123
+    username: ${DB_USERNAME:exchange}
+    password: ${DB_PASSWORD:exchange123}
   jpa:
     hibernate:
       ddl-auto: update
